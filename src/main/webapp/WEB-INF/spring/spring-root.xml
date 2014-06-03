@@ -1,0 +1,50 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans     
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+
+	<!-- classpath: derlenmiş dizinde config.properties dosyamı oku -->
+	<context:property-placeholder location="classpath:config.properties" />
+
+	<!-- Beans -->
+	<bean id="mail"
+		class="com.company.product.service.impl.MailReportServiceImpl" />
+
+<!-- dataSource ID li bir bean oluştur. bean class olarak dbCP nin BasicDataSource set et -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName">
+			<value>${db.driver}</value> <!-- ${degisken} şeklinde tanımama yapıldığı için config.properties dosyasında degisken aranır -->
+		</property>
+		<property name="url">
+			<value>${db.url}</value><!-- ${degisken} şeklinde tanımama yapıldığı için config.properties dosyasında degisken aranır -->
+		</property>
+		<property name="username">
+			<value>${db.user}</value><!-- ${degisken} şeklinde tanımama yapıldığı için config.properties dosyasında degisken aranır -->
+		</property>
+		<property name="password">
+			<value>${db.password}</value><!-- ${degisken} şeklinde tanımama yapıldığı için config.properties dosyasında degisken aranır -->
+		</property>
+		<property name="initialSize">
+			<value>2</value>
+		</property>
+		<property name="maxActive">
+			<value>5</value>
+		</property>
+		<property name="maxIdle">
+			<value>2</value>
+		</property>
+	</bean>
+
+	<!-- Scan for components under this package -->
+	<context:component-scan base-package="com.company.product" />
+	<context:annotation-config />
+
+	<!-- Import spring security configurations -->
+	<import resource="spring-scheduler.xml" /> <!-- scheduler task tanımının yapıldığı xml dosyasını çağır -->
+
+</beans>
